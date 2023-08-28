@@ -1,0 +1,96 @@
+#:kivy 1.11.1
+GridLayout:
+    cols: 1
+    ScreenManager:
+        id: screen_manager
+
+        Main:
+            name: "main"
+            id: main
+
+        Microscope:
+            name: "microscope"
+            id: microscope
+
+<Main>:
+    BoxLayout:
+
+        orientation:'vertical'
+
+
+        Label:
+            text: 'BLA BLA BLA BLA '
+            bold: True
+            color: [1,1,1,1]
+            size_hint: (1, None)
+            height: 100
+
+        GridLayout:
+            cols:2
+            size: root.width, root.height
+            padding: 10
+            id:box1
+            BoxLayout:
+
+                orientation: 'vertical'
+                Label:
+                    text: 'CAMERA'
+                    bold: True
+                    color: [1,1,0,1]
+                    # size_hint: (1, None)
+                    # height: 160
+                ToggleButton:
+
+                    text:'Play/Pause'
+                    on_press: camera1.play = not camera1.play
+                    size_hint: (1, None)
+                    height: 60
+
+
+            CameraCv:
+                id: camera1
+                resolution: (640,480)
+                size_hint: (1, None)
+                height: 350
+
+        BoxLayout:
+            orientation:'horizontal'
+            Button:
+                text:"MICROSCOPIO"
+                on_press:
+                    app.root.ids['screen_manager'].current = 'microscope'
+                size_hint: (1, None)
+                height: 70
+
+<Microscope>:
+    BoxLayout:
+        id: box2
+        orientation:'vertical'
+        # if i remove this cam it work in main screen
+        CameraCv:
+            id: camera2
+            resolution: (640,480)
+            size_hint: (1, None)
+            height: 350
+            keep_ratio: True
+            allow_stretch: True
+
+        Button:
+            text:'image salve'
+            on_press: app.root.ids['screen_manager'].current = 'main'
+            size_hint:(1,None)
+            height: 70
+
+
+<CameraCv>:
+
+    keep_ratio: True
+    allow_stretch: True
+
+    canvas.before:
+        PushMatrix
+        Rotate:
+            axis: 0, 0, 1
+            origin: root.center
+    canvas.after:
+        PopMatrix
